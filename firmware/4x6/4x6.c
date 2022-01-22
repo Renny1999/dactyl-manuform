@@ -59,9 +59,60 @@ bool process_record_user (uint16_t keycode, keyrecord_t *record){
         //    return false;
         //    break;
         
+        // special cases for the actual modifier keys
+        case KC_LCTL:
+            if(record -> event.pressed) {
+                mods |= MOD_BIT(keycode);
+            }else{
+                mods &= ~(MOD_BIT(keycode));
+            }
+            return true;
+            break;
+        case KC_LGUI:
+            if(record -> event.pressed) {
+                mods |= MOD_BIT(keycode);
+            }else{
+                mods &= ~(MOD_BIT(keycode));
+            }
+            return true;
+            break;
+        case KC_LALT:
+            if(record -> event.pressed) {
+                mods |= MOD_BIT(keycode);
+            }else{
+                mods &= ~(MOD_BIT(keycode));
+            }
+            return true;
+            break;
+        case KC_RCTL:
+            if(record -> event.pressed) {
+                mods |= MOD_BIT(keycode);
+            }else{
+                mods &= ~(MOD_BIT(keycode));
+            }
+            return true;
+            break;
+        case KC_RGUI:
+            if(record -> event.pressed) {
+                mods |= MOD_BIT(keycode);
+            }else{
+                mods &= ~(MOD_BIT(keycode));
+            }
+            return true;
+            break;
+        case KC_RALT:
+            if(record -> event.pressed) {
+                mods |= MOD_BIT(keycode);
+            }else{
+                mods &= ~(MOD_BIT(keycode));
+            }
+            return true;
+            break;
+        
         default:
             mod_roll(record, 0, 0, keycode, 10);
             return true;
+            break;
     }
     return true;
 }
@@ -74,6 +125,13 @@ void clear_event(void){
     }
 }
 
+/* takes care of key presses and releases
+* for normal keys (tap only keys), this function does not perform the actual
+* key registering. 
+* This is because if we register the key press here, press and holding down 
+* the key will only input one character, which is NOT what we want.
+* We want press and hold to repeatedly input the character.
+*/
 void mod_roll (keyrecord_t *record, uint8_t side,
         uint16_t modifier, uint16_t keycode, uint8_t column) {
 
@@ -105,6 +163,25 @@ void mod_roll (keyrecord_t *record, uint8_t side,
         }
 
         if (modifier) { 
+            /*
+             * Interesting case:
+             *  if a control key if already pressed, and a home row modifier
+             *  key for a control key is tapped, the RELEASE event will 
+             *  nullify the control key, causing a normal character to be 
+             *  registered.
+             *  The solution is to chech for the modifier at key press
+             * */
+            if (mods & MOD_BIT(modifier)) { 
+                /*
+                 * if the modifier is already pressed, the key becomes
+                 * a normal key                                       
+                 * */
+                // pretend the key if tapped 
+                tap_key(keycode);
+                // pretend the key is released
+                e[column].key_timer = 0;
+                return;
+            }
             // sends modifier key_down event
             register_modifier(modifier);
         }
@@ -153,15 +230,19 @@ void mod_roll (keyrecord_t *record, uint8_t side,
     }
 }
 
-
+// presses a modifier
 void register_modifier(uint16_t keycode){
     register_code(keycode);
     mods |= MOD_BIT(keycode);
 }
+
+// releases a modifier
 void unregister_modifier(uint16_t keycode){
     unregister_code(keycode);
     mods &= ~(MOD_BIT(keycode));
 }
+
+// applies a function to all modifiers
 void mod_all(void (*f)(uint8_t)) {
   if (mods & MOD_BIT(KC_LGUI)) { f(KC_LGUI); }
   if (mods & MOD_BIT(KC_LCTL)) { f(KC_LCTL); }
@@ -173,7 +254,12 @@ void mod_all(void (*f)(uint8_t)) {
   if (mods & MOD_BIT(KC_RGUI)) { f(KC_RGUI); }
 }
 
+// taps a key (press and release)
 void tap_key(uint16_t keycode){
     register_code(keycode);
     unregister_code(keycode);
+}
+
+void matrix_init_user(void) {
+    clear_event();
 }
