@@ -5,9 +5,13 @@
 #define LEFT 1
 #define RIGHT 2
 
-#define HOLD_THRESHOLD 200
+#define HOLD_THRESHOLD 150
 
 static uint8_t mods = 0;
+
+// indicates if the actual modifier key is presssed or not
+// this is not useful at the moment
+static uint8_t realmods = 0;
 
 static struct column_event {
     uint16_t key_timer;
@@ -62,49 +66,61 @@ bool process_record_user (uint16_t keycode, keyrecord_t *record){
         // special cases for the actual modifier keys
         case KC_LCTL:
             if(record -> event.pressed) {
+                realmods |= MOD_BIT(keycode);
                 mods |= MOD_BIT(keycode);
             }else{
-                mods &= ~(MOD_BIT(keycode));
+                realmods &= ~(MOD_BIT(keycode));
+                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
         case KC_LGUI:
             if(record -> event.pressed) {
+                realmods |= MOD_BIT(keycode);
                 mods |= MOD_BIT(keycode);
             }else{
-                mods &= ~(MOD_BIT(keycode));
+                realmods &= ~(MOD_BIT(keycode));
+                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
         case KC_LALT:
             if(record -> event.pressed) {
+                realmods |= MOD_BIT(keycode);
                 mods |= MOD_BIT(keycode);
             }else{
-                mods &= ~(MOD_BIT(keycode));
+                realmods &= ~(MOD_BIT(keycode));
+                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
         case KC_RCTL:
             if(record -> event.pressed) {
+                realmods |= MOD_BIT(keycode);
                 mods |= MOD_BIT(keycode);
             }else{
-                mods &= ~(MOD_BIT(keycode));
+                realmods &= ~(MOD_BIT(keycode));
+                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
         case KC_RGUI:
             if(record -> event.pressed) {
+                realmods |= MOD_BIT(keycode);
                 mods |= MOD_BIT(keycode);
             }else{
-                mods &= ~(MOD_BIT(keycode));
+                realmods &= ~(MOD_BIT(keycode));
+                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
         case KC_RALT:
             if(record -> event.pressed) {
+                realmods |= MOD_BIT(keycode);
                 mods |= MOD_BIT(keycode);
             }else{
-                mods &= ~(MOD_BIT(keycode));
+                realmods &= ~(MOD_BIT(keycode));
+                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
@@ -143,22 +159,57 @@ void mod_roll (keyrecord_t *record, uint8_t side,
         prev_key            = next_key; 
         next_key            = column; 
 
-        if(e[prev_key].mod != 0 && e[prev_key].key_timer != 0 ){
-            // the previous key is a modifier key and its not released
+        if(column != prev_key &&    /* skip if the same homerow modifier is 
+                                     * tapped twice
+                                     */
+           e[prev_key].mod != 0 && 
+           e[prev_key].key_timer != 0 ){
+        // the previous key is a modifier key and its not released
+        /*
+         * there are two situation where the previos key should not 
+         * become a modifier key when another key is pressd before the 
+         * first key is released && before the HOLD_THRESHOLD
+         * 
+         * 1. current key is a normal key
+         * 2. current key results in the same modifier as the first key
+         *  if the modifier is already pressed, the key becomes
+         *  a normal key                                       
+         *  the modifier can be caused by the actual modifier key or the
+         *  home row modifier, because the home row modifiers sends key 
+         *  modifier keydown events at key press
+         * */
+            // case 1: current key is a normal key 
             if(modifier == 0){
-               // current key is a normal key 
                if(timer_elapsed(e[prev_key].key_timer) < HOLD_THRESHOLD) {
-                    // previous key should not trigger modifier
+                    // previous key should not become modifier
                     mod_all(unregister_code);
-                    // shoot previous key
+                    // fire previous key
                     tap_key(e[prev_key].keycode);
                     // pretend the prev key is released
                     e[prev_key].key_timer = 0;
                     e[column].key_timer = 0;
                     return;
                }
-            }else{
-                // current key is another home row key
+            }else{ 
+            // case 2: the two keys will result in the same modifier
+                if(e[prev_key].mod == modifier){
+                    if(timer_elapsed(e[prev_key].key_timer) < HOLD_THRESHOLD) {
+                        // previous key should not become modifier
+                        mod_all(unregister_code);
+                        // fire previous key
+                        tap_key(e[prev_key].keycode);
+                        /* 
+                        * the second key needs to be fired because it is a 
+                        * home row modifier, and the default behavior is not 
+                        * used
+                        */ 
+                        tap_key(keycode);
+                        // pretend the prev key is released
+                        e[prev_key].key_timer = 0;
+                        e[column].key_timer = 0;
+                        return;
+                   }
+                }
             }
         }
 
@@ -172,11 +223,7 @@ void mod_roll (keyrecord_t *record, uint8_t side,
              *  The solution is to chech for the modifier at key press
              * */
             if (mods & MOD_BIT(modifier)) { 
-                /*
-                 * if the modifier is already pressed, the key becomes
-                 * a normal key                                       
-                 * */
-                // pretend the key if tapped 
+                // pretend the key is tapped 
                 tap_key(keycode);
                 // pretend the key is released
                 e[column].key_timer = 0;
