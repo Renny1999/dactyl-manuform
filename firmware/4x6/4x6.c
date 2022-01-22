@@ -27,7 +27,7 @@ static uint8_t realmods = 0;
 
 static uint16_t pending = 0;
 
-#define WAIT(col) { \
+#define WAIT_HT(col) { \
     switch (col) {\
         case 0:\
             pending |=  ELEMENT_0;\
@@ -245,14 +245,16 @@ void mod_roll (keyrecord_t *record, uint8_t side,
 
         if (modifier) {
             // this key is a is a HRM, set pending
-            WAIT(column);
+            WAIT_HT(column);
         }
         // here, we need to see if any pending keys can become modifiers
         if (pending) {
             int i;
             for(i = 0; i < 10; i++) {
-                if(timer_elapsed(e[i].key_timer) > HOLD_THRESHOLD) {
-                   
+                if((e[i].key_timer != 0) && (timer_elapsed(e[i].key_timer) >= HOLD_THRESHOLD)) {
+                    // activate the modifier and stop their waiting
+                    register_modifier(e[i].mod);
+                    UNWAIT(i);
                 }
             }
         }
@@ -263,56 +265,61 @@ void mod_roll (keyrecord_t *record, uint8_t side,
                                      */
            e[prev_key].mod != 0 && 
            e[prev_key].key_timer != 0 ){
-        // the previous key is a modifier key and its not released
-        /*
-         * there are two situation where the previos key should not 
-         * become a modifier key when another key is pressd before the 
-         * first key is released && before the HOLD_THRESHOLD
-         * 
-         * 1. current key is a normal key
-         * 2. current key results in the same modifier as the first key
-         *  if the modifier is already pressed, the key becomes
-         *  a normal key                                       
-         *  the modifier can be caused by the actual modifier key or the
-         *  home row modifier, because the home row modifiers sends key 
-         *  modifier keydown events at key press
-         * */
-         if(timer_elapsed(e[prev_key].key_timer) < HOLD_THRESHOLD) {
-            // case 1: current key is a normal key 
-            if(modifier == 0){
-                    // previous key should not become modifier
-                    mod_all(unregister_code);
-                    // fire previous key
-                    tap_key(e[prev_key].keycode);
-                    // pretend the prev key is released
-                    e[prev_key].key_timer = 0;
-                    e[column].key_timer = 0;
-            }else{ 
-            // case 2: the two keys will result in the same modifier
-                // previous key should not become modifier
-                mod_all(unregister_code);
-                // fire previous key
-                tap_key(e[prev_key].keycode);
-                /* 
-                * the second key needs to be fired because it is a 
-                * home row modifier, and the default behavior is not 
-                * used
-                */ 
-                tap_key(keycode);
-                // pretend the prev key is released
-                e[prev_key].key_timer = 0;
-                e[column].key_timer = 0;
+            // the previous key is a modifier key and its not released
+            /*
+             * there are two situation where the previos key should not 
+             * become a modifier key when another key is pressd before the 
+             * first key is released && before the HOLD_THRESHOLD
+             * 
+             * 1. current key is a normal key
+             * 2. current key results in the same modifier as the first key
+             *  if the modifier is already pressed, the key becomes
+             *  a normal key                                       
+             *  the modifier can be caused by the actual modifier key or the
+             *  home row modifier, because the home row modifiers sends key 
+             *  modifier keydown events at key press
+             * */
+             if(timer_elapsed(e[prev_key].key_timer) < HOLD_THRESHOLD) {
+                // case 1: current key is a normal key 
+                if(modifier == 0){
+                        // previous key should not become modifier
+                        mod_all(unregister_code);
+                        // fire previous key
+                        tap_key(e[prev_key].keycode);
+                        // pretend the prev key is released
+                        e[prev_key].key_timer = 0;
+                        e[column].key_timer = 0;
+                }else{ 
+                    if (e[prev_key].mod == modifier) {
+                    // case 2: the two keys will result in the same modifier
+                        // previous key should not become modifier
+                        mod_all(unregister_code);
+                        // fire previous key
+                        tap_key(e[prev_key].keycode);
+                        /* 
+                        * the second key needs to be fired because it is a 
+                        * home row modifier, and the default behavior is not 
+                        * used
+                        */ 
+                        tap_key(keycode);
+                        // pretend the prev key is released
+                        e[prev_key].key_timer = 0;
+                        e[column].key_timer = 0;
 
-                // current key is not waiting
-                UNWAIT(column);
-            }
-            // the previous key is no longer waiting
-            UNWAIT(prev_key);
-            return;
-        } else {
-            // the previous key was held down long enough to become a modifier
-            register_modifier(e[prev_key].mod);
-            UNWAIT(prev_key);
+                        // current key is not waiting
+                        UNWAIT(column);
+                        return;
+
+                    }
+                }
+                // the previous key is no longer waiting
+                UNWAIT(prev_key);
+             } else {
+                // the previous key was held down long enough to become a modifier
+                //register_modifier(e[prev_key].mod);
+                //UNWAIT(prev_key);
+             }
+
         }
 
         if (modifier) { 
@@ -376,6 +383,7 @@ void mod_roll (keyrecord_t *record, uint8_t side,
         e[column].key_timer = 0;
     }
 }
+
 
 // presses a modifier
 void register_modifier(uint16_t keycode){
