@@ -7,11 +7,95 @@
 
 #define HOLD_THRESHOLD 200
 
+#define ELEMENT_0   1
+#define ELEMENT_1   2
+#define ELEMENT_2   4
+#define ELEMENT_3   8
+#define ELEMENT_4   16
+#define ELEMENT_5   32
+#define ELEMENT_6   64      
+#define ELEMENT_7   128
+#define ELEMENT_8   256
+#define ELEMENT_9   512
+
+
 static uint8_t mods = 0;
 
 // indicates if the actual modifier key is presssed or not
 // this is not useful at the moment
 static uint8_t realmods = 0;
+
+static uint16_t pending = 0;
+
+#define WAIT(col) { \
+    switch (col) {\
+        case 0:\
+            pending |=  ELEMENT_0;\
+            break;\
+        case 1:\
+            pending |=  ELEMENT_1;\
+            break;\
+        case 2:\
+            pending |=  ELEMENT_2;\
+            break;\
+        case 3:\
+            pending |=  ELEMENT_3;\
+            break;\
+        case 4:\
+            pending |=  ELEMENT_4;\
+            break;\
+        case 5:\
+            pending |=  ELEMENT_5;\
+            break;\
+        case 6:\
+            pending |=  ELEMENT_6;\
+            break;\
+        case 7:\
+            pending |=  ELEMENT_7;\
+            break;\
+        case 8:\
+            pending |=  ELEMENT_8;\
+            break;\
+        case 9:\
+            pending |=  ELEMENT_9;\
+            break;\
+    }\
+} while (0)
+
+#define UNWAIT(col) { \
+    switch (col) {\
+        case 0:\
+            pending &=  ~ELEMENT_0;\
+            break;\
+        case 1:\
+            pending &=  ~ELEMENT_1;\
+            break;\
+        case 2:\
+            pending &=  ~ELEMENT_2;\
+            break;\
+        case 3:\
+            pending &=  ~ELEMENT_3;\
+            break;\
+        case 4:\
+            pending &=  ~ELEMENT_4;\
+            break;\
+        case 5:\
+            pending &=  ~ELEMENT_5;\
+            break;\
+        case 6:\
+            pending &=  ~ELEMENT_6;\
+            break;\
+        case 7:\
+            pending &=  ~ELEMENT_7;\
+            break;\
+        case 8:\
+            pending &=  ~ELEMENT_8;\
+            break;\
+        case 9:\
+            pending &=  ~ELEMENT_9;\
+            break;\
+    }\
+} while (0)
 
 static struct column_event {
     uint16_t key_timer;
