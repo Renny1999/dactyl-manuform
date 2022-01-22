@@ -5,7 +5,7 @@
 #define LEFT 1
 #define RIGHT 2
 
-#define HOLD_THRESHOLD 150
+#define HOLD_THRESHOLD 200
 
 static uint8_t mods = 0;
 
