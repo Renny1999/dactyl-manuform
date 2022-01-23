@@ -27,10 +27,3 @@
     { R40, R41, R42, R43, XXX, XXX } \
 }
 
-void mod_roll (keyrecord_t *record, uint8_t side,
-        uint16_t modifier, uint16_t keycode, uint8_t column); 
-
-void register_modifier(uint16_t keycode);
-void unregister_modifier(uint16_t keycode);
-void mod_all(void (*f)(uint8_t));
-void tap_key(uint16_t keycode);
