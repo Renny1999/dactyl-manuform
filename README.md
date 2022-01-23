@@ -33,6 +33,7 @@ typing `o`.
 The behavior we want: 
 * For a finger rolls, fire individual characters instead of firing modifiers
 * The code is inspired by [THE DARNEDST THING](http://thedarnedestthing.com/rolling%20qmk%20modifiers)
+* **This version activates HRMs only when a second key is pressed**
 
 ### Implementation Notes:
 * At key press, if a modifier if held down for a duration shorter than the
@@ -62,7 +63,7 @@ The behavior we want:
           that it will have the default behavior, which will allow the key to
           be registered multiple times when held down
 
-- [ ] The code right now will remove all the modifiers when it detects a finger
+- [x] The code right now will remove all the modifiers when it detects a finger
     roll. This behavior is not alway desirable such as in the following case:
     * a finger roll involving a modifier key while `LCtrl` is held down. 
     * this will remove the effect of `LCtrl`
