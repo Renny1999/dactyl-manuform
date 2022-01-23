@@ -63,6 +63,10 @@ The behavior we want:
           that it will have the default behavior, which will allow the key to
           be registered multiple times when held down
 
+- [ ] because I used a hacky way to disable default behavior for non-HRM keys 
+    when LCtrl is activated by HRM, using my layer toggle key does not work any
+    more when LCtrl was activated using HRM.
+
 - [x] The code right now will remove all the modifiers when it detects a finger
     roll. This behavior is not alway desirable such as in the following case:
     * a finger roll involving a modifier key while `LCtrl` is held down. 
