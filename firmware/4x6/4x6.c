@@ -151,60 +151,48 @@ bool process_record_user (uint16_t keycode, keyrecord_t *record){
         case KC_LCTL:
             if(record -> event.pressed) {
                 realmods |= MOD_BIT(keycode);
-                mods |= MOD_BIT(keycode);
             }else{
                 realmods &= ~(MOD_BIT(keycode));
-                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
         case KC_LGUI:
             if(record -> event.pressed) {
                 realmods |= MOD_BIT(keycode);
-                mods |= MOD_BIT(keycode);
             }else{
                 realmods &= ~(MOD_BIT(keycode));
-                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
         case KC_LALT:
             if(record -> event.pressed) {
                 realmods |= MOD_BIT(keycode);
-                mods |= MOD_BIT(keycode);
             }else{
                 realmods &= ~(MOD_BIT(keycode));
-                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
         case KC_RCTL:
             if(record -> event.pressed) {
                 realmods |= MOD_BIT(keycode);
-                mods |= MOD_BIT(keycode);
             }else{
                 realmods &= ~(MOD_BIT(keycode));
-                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
         case KC_RGUI:
             if(record -> event.pressed) {
                 realmods |= MOD_BIT(keycode);
-                mods |= MOD_BIT(keycode);
             }else{
                 realmods &= ~(MOD_BIT(keycode));
-                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
         case KC_RALT:
             if(record -> event.pressed) {
                 realmods |= MOD_BIT(keycode);
-                mods |= MOD_BIT(keycode);
             }else{
                 realmods &= ~(MOD_BIT(keycode));
-                mods &= MOD_BIT(keycode);
             }
             return true;
             break;
@@ -325,13 +313,13 @@ void mod_roll (keyrecord_t *record, uint8_t side,
         if (modifier) { 
             /*
              * Interesting case:
-             *  if a control key if already pressed, and a home row modifier
+             *  if a control key is already pressed, and a home row modifier
              *  key for a control key is tapped, the RELEASE event will 
              *  nullify the control key, causing a normal character to be 
              *  registered.
-             *  The solution is to chech for the modifier at key press
+             *  The solution is to check for the modifier at key press
              * */
-            if (mods & MOD_BIT(modifier)) { 
+            if (realmods & MOD_BIT(modifier)) { 
                 // pretend the key is tapped 
                 tap_key(keycode);
                 // pretend the key is released
@@ -340,9 +328,17 @@ void mod_roll (keyrecord_t *record, uint8_t side,
             }
         }
     }else{
+    /*
+     * KEY RELEASE
+     * */
         if (modifier) {
-            // sends modifier key_up event
-            unregister_modifier(modifier);
+            if(realmods & MOD_BIT(modifier)) {
+                // if the real modifier if pressed down, don't unregister the modifier
+            }else {
+                // sends modifier key_up event
+                unregister_modifier(modifier);
+            }
+            UNWAIT(column);
         }else{
             return;
         }
