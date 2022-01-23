@@ -5,7 +5,7 @@
 #define LEFT 1
 #define RIGHT 2
 
-#define HOLD_THRESHOLD 200
+#define HOLD_THRESHOLD 150
 
 #define ELEMENT_0   1
 #define ELEMENT_1   2
@@ -124,14 +124,14 @@ bool process_record_user (uint16_t keycode, keyrecord_t *record){
             return false;
             break;
 
-        //case KC_T:
-        //    mod_roll(record, LEFT, 0, KC_T, 3);
-        //    return false;
-        //    break;
-        //case KC_N:
-        //    mod_roll(record, LEFT, 0, KC_N, 6);
-        //    return false;
-        //    break;
+        case KC_T:
+            mod_roll(record, LEFT, KC_LSFT, KC_T, 3);
+            return false;
+            break;
+        case KC_N:
+            mod_roll(record, LEFT, KC_RSFT, KC_N, 6);
+            return false;
+            break;
 
         case KC_E:
             mod_roll(record, RIGHT,KC_LALT, KC_E, 7);
