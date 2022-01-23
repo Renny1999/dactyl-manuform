@@ -6,6 +6,7 @@ dactyl-manuform.
 The key mapping is Colemak-DHm with a layer for Vim navigation
 
 ## Custom Firmware
+This is very WIP!!
 ### Home Row Modifiers
 Colemak-DHm has an "L" shaped home row:
 ```
