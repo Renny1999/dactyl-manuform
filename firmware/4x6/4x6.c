@@ -5,7 +5,7 @@
 #define LEFT 1
 #define RIGHT 2
 
-#define HOLD_THRESHOLD 150
+#define HOLD_THRESHOLD 250
 
 #define ELEMENT_0   1
 #define ELEMENT_1   2
@@ -95,7 +95,43 @@ static uint16_t pending = 0;
             pending &=  ~ELEMENT_9;\
             break;\
     }\
-} while (0)
+}
+
+#define IsWAIT(col, res) { \
+    res = 0; \
+    switch (col) {\
+        case 0:\
+            res |=  ELEMENT_0;\
+            break;\
+        case 1:\
+            res |=  ELEMENT_1;\
+            break;\
+        case 2:\
+            res |=  ELEMENT_2;\
+            break;\
+        case 3:\
+            res |=  ELEMENT_3;\
+            break;\
+        case 4:\
+            res |=  ELEMENT_4;\
+            break;\
+        case 5:\
+            res |=  ELEMENT_5;\
+            break;\
+        case 6:\
+            res |=  ELEMENT_6;\
+            break;\
+        case 7:\
+            res |=  ELEMENT_7;\
+            break;\
+        case 8:\
+            res |=  ELEMENT_8;\
+            break;\
+        case 9:\
+            res |=  ELEMENT_9;\
+            break;\
+    }\
+} while (0) while (0)
 
 static struct column_event {
     uint16_t key_timer;
@@ -271,17 +307,21 @@ void mod_roll (keyrecord_t *record, uint8_t side,
                 // case 1: current key is a normal key 
                 if(modifier == 0){
                         // previous key should not become modifier
-                        mod_all(unregister_code);
+                        
                         // fire previous key
                         tap_key(e[prev_key].keycode);
                         // pretend the prev key is released
                         e[prev_key].key_timer = 0;
                         e[column].key_timer = 0;
+                        /*
+                         * the current key is not fired because it is a normal key, and 
+                         * let it do the default behavior
+                         * */
                 }else{ 
                     if (e[prev_key].mod == modifier) {
                     // case 2: the two keys will result in the same modifier
                         // previous key should not become modifier
-                        mod_all(unregister_code);
+                        
                         // fire previous key
                         tap_key(e[prev_key].keycode);
                         /* 
@@ -303,6 +343,16 @@ void mod_roll (keyrecord_t *record, uint8_t side,
                 // the previous key is no longer waiting
                 UNWAIT(prev_key);
              } else {
+                // this is an edge case where a HRM is activated, and a key with the same HRM is pressed
+                // in this case, the second key should be fired at press, because at the beginning of release, 
+                // we unregister the modifier, which in this case is undesirable
+                if (modifier) {
+                    tap_key(keycode);
+                    // make key_timer 0 so the key will not be registered again on release
+                    e[column].key_timer = 0;
+                    UNWAIT(column);
+                }
+
                 // the previous key was held down long enough to become a modifier
                 //register_modifier(e[prev_key].mod);
                 //UNWAIT(prev_key);
@@ -335,8 +385,10 @@ void mod_roll (keyrecord_t *record, uint8_t side,
             if(realmods & MOD_BIT(modifier)) {
                 // if the real modifier if pressed down, don't unregister the modifier
             }else {
-                // sends modifier key_up event
-                unregister_modifier(modifier);
+                if(e[column].key_timer != 0) {
+                    // sends modifier key_up event
+                    unregister_modifier(modifier);
+                }
             }
             UNWAIT(column);
         }else{
