@@ -95,7 +95,7 @@ static uint16_t pending = 0;
             pending &=  ~ELEMENT_9;\
             break;\
     }\
-}
+}while(0)
 
 #define IsWAIT(col, res) { \
     res = 0; \
@@ -343,21 +343,22 @@ void mod_roll (keyrecord_t *record, uint8_t side,
                 // the previous key is no longer waiting
                 UNWAIT(prev_key);
              } else {
-                // this is an edge case where a HRM is activated, and a key with the same HRM is pressed
-                // in this case, the second key should be fired at press, because at the beginning of release, 
-                // we unregister the modifier, which in this case is undesirable
-                if (modifier) {
-                    tap_key(keycode);
-                    // make key_timer 0 so the key will not be registered again on release
-                    e[column].key_timer = 0;
-                    UNWAIT(column);
-                }
 
                 // the previous key was held down long enough to become a modifier
                 //register_modifier(e[prev_key].mod);
                 //UNWAIT(prev_key);
              }
 
+        }// this code block is not executed if column = prev
+
+        // this is an edge case where a HRM is activated, and a key with the same HRM is pressed
+        // in this case, the second key should be fired at press, because at the beginning of release, 
+        // we unregister the modifier, which in this case is undesirable
+        if (mods & MOD_BIT(modifier)) {
+            tap_key(keycode);
+            // make key_timer 0 so the key will not be registered again on release
+            e[column].key_timer = 0;
+            UNWAIT(column);
         }
 
         if (modifier) { 
