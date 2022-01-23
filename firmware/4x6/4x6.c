@@ -174,9 +174,9 @@ bool process_record_user (uint16_t keycode, keyrecord_t *record){
             return false;
             break;
         case KC_I:
-            mod_roll(record, RIGHT,KC_LCTL, KC_I, 8);
-            return false;
-            break;
+        //    mod_roll(record, RIGHT,KC_LCTL, KC_I, 8);
+        //    return false;
+        //    break;
 
         //case KC_O:
         //    mod_roll(record, LEFT, 0, KC_O, 9);
@@ -208,6 +208,15 @@ bool process_record_user (uint16_t keycode, keyrecord_t *record){
             }
             return true;
             break;
+        case KC_LSFT:
+            if(record -> event.pressed) {
+                realmods |= MOD_BIT(keycode);
+            }else{
+                realmods &= ~(MOD_BIT(keycode));
+            }
+            return true;
+            break;
+
         case KC_RCTL:
             if(record -> event.pressed) {
                 realmods |= MOD_BIT(keycode);
@@ -232,9 +241,30 @@ bool process_record_user (uint16_t keycode, keyrecord_t *record){
             }
             return true;
             break;
+        case KC_RSFT:
+            if(record -> event.pressed) {
+                realmods |= MOD_BIT(keycode);
+            }else{
+                realmods &= ~(MOD_BIT(keycode));
+            }
+            return true;
+            break;
         
         default:
             mod_roll(record, 0, 0, keycode, 10);
+            /*
+             * this is super hacky, and I HATE it!
+             * for some reason, KC_LCTL is activated on a HRM, the following 
+             * normal key will get "tapped" by my code, then if we retun true, 
+             * it will get tapped again by the default behavior. 
+             * So, we will just return false if KC_LCTL was activated by HRM
+             *
+             * */
+            // if left control is activated by HRM, return false
+            //
+            if ((mods & MOD_BIT(KC_LCTL)) && !(realmods & MOD_BIT(KC_LCTL))) {
+                return false;
+            }
             return true;
             break;
     }
