@@ -34,6 +34,15 @@ The behavior we want:
 * For a finger rolls, fire individual characters instead of firing modifiers
 * The code is inspired by [THE DARNEDST THING](http://thedarnedestthing.com/rolling%20qmk%20modifiers)
 
+What this code does: <br>
+As soon as the HRM keys are pressed, the modifiers are activated. This approach is easy as we simply disable the modifiers on demand depending on different situations. <br>
+**HOWEVER: THIS VERSION HAS PROBLEMS** <br>
+In the following situations, pressing Alt key by itself has some behavior that we don't want
+* Sougou Chinese input method
+* etc.
+
+Therefore, it might be a better approach to activate the HMRs only when a second key is pressed.
+
 ### Implementation Notes:
 * At key press, if a modifier if held down for a duration shorter than the
   HOLD_THRESHOLD while a normal key is pressed, we can immediately fire the
