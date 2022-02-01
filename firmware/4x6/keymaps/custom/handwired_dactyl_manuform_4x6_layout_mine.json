@@ -55,9 +55,9 @@
       "KC_LSFT",
       "KC_ENT",
       "KC_RSFT",
-      "KC_NO",
-      "KC_NO",
-      "KC_NO",
+      "TO(0)",
+      "TO(6)",
+      "TO(4)",
       "KC_RCTL"
     ],
     [
@@ -78,7 +78,7 @@
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
-      "KC_EQL",
+      "KC_PLUS",
       "KC_H",
       "KC_J",
       "KC_K",
@@ -271,10 +271,10 @@
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
+      "TO(0)",
+      "TO(0)",
       "KC_TRNS",
-      "TO(0)",
-      "TO(0)",
-      "KC_TRNS"
+      "TO(0)"
     ],
     [
       "KC_TILD",
@@ -379,7 +379,7 @@
       "KC_SPC",
       "KC_NO",
       "KC_NO",
-      "KC_NO",
+      "TO(0)",
       "TO(0)",
       "KC_NO",
       "TO(0)"
