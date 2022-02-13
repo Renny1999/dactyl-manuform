@@ -42,7 +42,7 @@
       "KC_COMM",
       "KC_DOT",
       "KC_SLSH",
-      "KC_RSFT",
+      "KC_LGUI",
       "KC_LGUI",
       "KC_LALT",
       "KC_HOME",
@@ -58,7 +58,7 @@
       "TO(0)",
       "TO(6)",
       "TO(4)",
-      "KC_RCTL"
+      "TO(0)"
     ],
     [
       "KC_GRV",
