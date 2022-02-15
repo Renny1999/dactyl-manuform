@@ -40,6 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGB_DI_PIN D3
 #define RGBLED_NUM 12
 
+#define TAPPING_FORCE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT
 #define TAPPING_TERM 200
 #define TAPPING_TERM_PER_KEY
