@@ -26,9 +26,15 @@ uint16_t last = 0;
 uint16_t last_timer=0;
 uint16_t LT_timer= 0;
 bool nextPressed = 0;
-bool isroll = 0;
+bool isroll = false;
 
-bool process_record_user(uint16_t keycode, keyrecord_t* record){
+bool process_record_kb(uint16_t keycode, keyrecord_t* record){
+            //if (keycode == LSFT_T(KC_3)){
+            //    isroll = true;
+            //    register_code (KC_B);
+            //    unregister_code (KC_B);
+            //    return true;
+            //}
     if (keycode == LT(1, KC_SPACE)){
         if (record -> event.pressed) {
             last = keycode; 
@@ -48,16 +54,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record){
      * in this case, detect finger roll and immediately fire the key after LT
      * */
     
-    if (LT_timer == 0) {
-        return true;
-    }
-    if (record->event.presssd){
+    if (record->event.pressed){
         // record the time
         last_timer=timer_read();
         // check if this is a mod roll
         if(LT_timer > 0 && timer_elapsed(LT_timer) < TAPPING_TERM) {
             // this is a mod roll
-            isroll = true;
+            if (keycode == LSFT_T(KC_S)){
+                isroll = true;
+                register_code (KC_B);
+                unregister_code (KC_B);
+                return true;
+            }
         } else {
             isroll = false; 
             return true;
@@ -69,17 +77,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record){
             last_timer = 0;
             return true;
         }else{
-            if (isroll) {
+            if (isroll == true) {
                 // LT is released, and it's a finger roll:
                 // in this case, do the tap action
-                register_code (keycode);
-                unregister_code (keycode);
+                register_code (KC_B);
+                unregister_code (KC_B);
                 last = keycode;
                 last_timer=0;
+                isroll = false;
+                return false;
             }
+            return true;
         }
-            
+        return true;
     }
-    
+    return true;
 }
 
