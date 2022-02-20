@@ -48,7 +48,7 @@
       "KC_HOME",
       "KC_END",
       "MO(3)",
-      "MO(1)",
+      "LT(1,KC_SPC)",
       "KC_SPC",
       "LT(2,KC_SPC)",
       "KC_NO",
