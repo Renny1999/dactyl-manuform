@@ -18,3 +18,6 @@ not trigger the MOD_TAP modifiers. <br>
  key.
 
 
+## Flashing The Keyboard
+* elite-c: `qmk flash keymaps/custom/default.json -bl dfu`
+* pro-micro: `qmk flash keymaps/custom/default.json`
