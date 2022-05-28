@@ -49,7 +49,7 @@
       "KC_END",
       "LT(3,KC_SPC)",
       "LT(1,KC_SPC)",
-      "KC_ENT",
+      "LSFT_T(KC_ENT)",
       "LT(2,KC_SPC)",
       "SGUI(KC_NO)",
       "KC_LSFT",
