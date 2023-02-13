@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "notes": "My awesome keymap",
+  "notes": "this layout eliminated the qwerty layer, and also added a repeatable D key on layer 1",
   "documentation": "\"This file is a QMK Configurator export. You can import this at <https://config.qmk.fm>. It can also be used directly with QMK's source code.\n\nTo setup your QMK environment check out the tutorial: <https://docs.qmk.fm/#/newbs>\n\nYou can convert this file to a keymap.c using this command: `qmk json2c {keymap}`\n\nYou can compile this keymap using this command: `qmk compile {keymap}`\"\n",
   "keyboard": "handwired/dactyl_manuform/4x6",
   "keymap": "handwired_dactyl_manuform_4x6_layout_mine",
@@ -57,7 +57,7 @@
       "RSG(KC_NO)",
       "TO(0)",
       "KC_NO",
-      "TO(4)",
+      "KC_NO",
       "TO(0)"
     ],
     [
@@ -89,7 +89,7 @@
       "KC_TRNS",
       "KC_DOT",
       "KC_COMM",
-      "KC_TRNS",
+      "KC_D",
       "KC_TRNS",
       "KC_TRNS",
       "KC_MINS",
@@ -97,10 +97,10 @@
       "KC_LBRC",
       "KC_RBRC",
       "KC_TRNS",
-      "KC_TRNS",
-      "KC_TRNS",
-      "KC_LCTL",
-      "KC_RCTL",
+      "KC_UP",
+      "KC_DOWN",
+      "KC_LEFT",
+      "KC_RGHT",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
@@ -153,8 +153,8 @@
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
-      "KC_MPRV",
-      "KC_MNXT",
+      "KC_LEFT",
+      "KC_RGHT",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
@@ -205,10 +205,10 @@
       "KC_RCBR",
       "KC_NO",
       "KC_NO",
-      "KC_HOME",
-      "KC_END",
-      "KC_NO",
-      "KC_NO",
+      "KC_DOWN",
+      "KC_UP",
+      "KC_LEFT",
+      "KC_RGHT",
       "KC_TRNS",
       "KC_TRNS",
       "KC_TRNS",
@@ -331,5 +331,5 @@
       "KC_TRNS"
     ]
   ],
-  "author": "Anonymous"
+  "author": "renny"
 }
