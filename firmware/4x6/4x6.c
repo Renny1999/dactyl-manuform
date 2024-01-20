@@ -3,11 +3,8 @@
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-      case LT(2,KC_SPC):
-        return 400;
-
-      case LSFT_T(KC_ENT):
-        return 400;
+      case LT(1,KC_ENT):
+        return 100;
 
       default:
         return TAPPING_TERM;
