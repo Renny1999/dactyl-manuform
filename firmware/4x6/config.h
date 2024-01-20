@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "config_common.h"
+//#include "config_common.h"
 
 /* USB Device descriptor parameter */
 #define PRODUCT_ID 0x3436
@@ -48,4 +48,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // mouse setting
 #define MK_3_SPEED 100
+
+#define ONESHOT_TIMEOUT 500
 
