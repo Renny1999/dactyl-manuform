@@ -19,5 +19,11 @@ not trigger the MOD_TAP modifiers. <br>
 
 
 ## Flashing The Keyboard
+### Using the json keymaps
+Custom configs may not be honored for json keymaps
 * elite-c: `qmk flash keymaps/custom/default.json -bl dfu`
 * pro-micro: `qmk flash keymaps/custom/default.json`
+
+## Using custom keymaps
+Custom configs are honored
+* elite-c: `qmk flash -kb handwired/dactyl_manuform/4x6 -km custom -bl dfu`
