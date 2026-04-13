@@ -26,6 +26,8 @@ Custom configs may not be honored for json keymaps
 
 ## Using custom keymaps
 might need `sudo apt install avrdude`
+1. run `qmk json2c` to generate `keymap.c` from json
+2. place `keymap.c` in `dactyl_manuform/4x6/keymaps/custom`
 Custom configs are honored
 * elite-c: `qmk flash -kb handwired/dactyl_manuform/4x6 -km custom -bl dfu`
 * pro-micro: `qmk flash -kb handwired/dactyl_manuform/4x6 -km custom`
