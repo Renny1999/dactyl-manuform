@@ -10,7 +10,7 @@ This version uses the geric MOD_TAP functionality provided by QMK. <br>
 This is working well so far, and my custom macros in the other branches may not
 be necessary. <br>
 
-This version use the `IGNORE_MOD_TAP_INTERRUPT` macro so that finger rolls will
+This version use the `IGNORE_MOD_TAP_INTERRUPT` macro (enabled by default) so that finger rolls will
 not trigger the MOD_TAP modifiers. <br>
  
  To quickly activate the modifier without waiting for the `TAPPING_TERM`, I can
