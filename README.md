@@ -3,7 +3,7 @@ This repo contains my custom key mapping and custom firmware for my 4x6
 dactyl-manuform.
 <br> 
 ## Custom Key Mapping
-The key mapping is Colemak-DHm with a layer for Vim navigation
+The key mapping is Colemak-DHm
 
 ## Custom Firmware
 This version uses the geric MOD_TAP functionality provided by QMK. <br>
