@@ -25,5 +25,8 @@ Custom configs may not be honored for json keymaps
 * pro-micro: `qmk flash keymaps/custom/default.json`
 
 ## Using custom keymaps
+might need `sudo apt install avrdude`
 Custom configs are honored
 * elite-c: `qmk flash -kb handwired/dactyl_manuform/4x6 -km custom -bl dfu`
+* pro-micro: `qmk flash -kb handwired/dactyl_manuform/4x6 -km custom`
+
