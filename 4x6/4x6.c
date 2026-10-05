@@ -16,17 +16,9 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
             // Immediately select the hold action when another key is pressed.
             return true;
 
-        // case LT(2, KC_SPACE):
-        //     // Immediately select the hold action when another key is pressed.
-        //     return true;
-
         case LT(3, KC_SPACE):
             // Immediately select the hold action when another key is pressed.
             return true;
-
-        case LSFT_T(KC_ENT):
-            // Immediately select the hold action when another key is pressed.
-          return true;
 
         default:
             // Do not select the hold action when another key is pressed.
@@ -40,19 +32,18 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     return IS_QK_MOD_TAP(keycode);
 }
 
-// Chordal hold: a HRM only resolves as hold when the other key is on the
-// opposite hand. Rows 0-4 are the left half, rows 5-9 the right half.
-// Thumb cluster keys are '*' (exempt), so thumb layer-taps keep working with
-// same-side keys, and HRM + same-side thumb key still allows a hold.
-char chordal_hold_handedness(keypos_t key) {
-    bool left = key.row < MATRIX_ROWS / 2;
-    uint8_t row = left ? key.row : key.row - MATRIX_ROWS / 2;
-
-    if (row == 4) {
-        return '*';  // lower thumb cluster
+// Chordal hold, limited to the H/E pair: when one of them is held and the
+// other is pressed, settle the held key as a tap so "he"/"eh" rolls never
+// fire GUI/Shift. Every other chord (e.g. Ctrl+W, Ctrl+L on the same hand)
+// resolves normally, so permissive hold applies.
+bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t *tap_hold_record,
+                      uint16_t other_keycode, keyrecord_t *other_record) {
+    switch (tap_hold_keycode) {
+        case LGUI_T(KC_H):
+            return other_keycode != RSFT_T(KC_E);
+        case RSFT_T(KC_E):
+            return other_keycode != LGUI_T(KC_H);
+        default:
+            return true;
     }
-    if (row == 3 && (left ? key.col >= 4 : key.col <= 1)) {
-        return '*';  // main thumb keys
-    }
-    return left ? 'L' : 'R';
 }

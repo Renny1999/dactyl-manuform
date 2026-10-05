@@ -18,27 +18,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-//#include "config_common.h"
+// USB IDs, matrix pins and diode direction live in keyboard.json
 
-/* USB Device descriptor parameter */
-#define PRODUCT_ID 0x3436
-
-/* key matrix size */
-// Rows are doubled-up
-#define MATRIX_ROWS 10
-#define MATRIX_COLS 6
-
-// row-driven
-#define MATRIX_ROW_PINS { F7, B1, B3, B2, B6 }
-#define MATRIX_COL_PINS { D4, C6, D7, E6, B4, B5 }
-
-/* COL2ROW or ROW2COL */
-
-// WS2812 RGB LED strip input and number of LEDs
-#define RGBLED_NUM 12
-
-// this allows rolling action to spit out tap for both keys
-// details in 4x6.c
+// left LT(1, KC_ENT) and LT(3, KC_SPC) switch layers as soon as another key is
+// pressed; every other tap-hold key lets rolls type both keys. details in 4x6.c
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
 #define TAPPING_TERM 200
@@ -48,14 +31,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // become a hold (e.g. s, then hold s + / => "s?" instead of "ss/")
 #define QUICK_TAP_TERM 0
 
-// HRMs fire immediately when another key is tapped while held (opposite hand only,
-// see CHORDAL_HOLD). Thumb layer-taps are excluded so the right space stays safe.
-// details in 4x6.c
+// HRMs fire immediately when another key is tapped while held. CHORDAL_HOLD is
+// only used to block the H/E pair. Thumb layer-taps are excluded so the right
+// space stays safe. details in 4x6.c
 #define PERMISSIVE_HOLD_PER_KEY
 #define CHORDAL_HOLD
-
-// mouse setting
-#define MK_3_SPEED 100
 
 #define ONESHOT_TIMEOUT 500
 
