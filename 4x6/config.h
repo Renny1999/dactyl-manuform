@@ -44,6 +44,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TAPPING_TERM 200
 #define TAPPING_TERM_PER_KEY
 
+// disable tap-then-hold auto-repeat so a quick re-press of a HRM can still
+// become a hold (e.g. s, then hold s + / => "s?" instead of "ss/")
+#define QUICK_TAP_TERM 0
+
+// HRMs fire immediately when another key is tapped while held (opposite hand only,
+// see CHORDAL_HOLD). Thumb layer-taps are excluded so the right space stays safe.
+// details in 4x6.c
+#define PERMISSIVE_HOLD_PER_KEY
+#define CHORDAL_HOLD
+
 // mouse setting
 #define MK_3_SPEED 100
 
